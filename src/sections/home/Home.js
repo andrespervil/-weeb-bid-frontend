@@ -70,7 +70,7 @@ export default function HomeSection({}) {
         <div className={styles.bid}>
           <h2>{lastBid?.value || product.initialPrice}€</h2>
           <div>
-            <TextField onChange={(evt) => setBid(+evt.target.value)} value={bid} />
+            <TextField onChange={(evt) => setBid(+evt.target.value)} value={bid} type="number" />
             <Button onClick={handleClickSendMessage}>Bid</Button>
           </div>
         </div>
