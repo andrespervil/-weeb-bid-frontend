@@ -1,16 +1,27 @@
-import '../common/styles/main.css'
+import 'react-toastify/ReactToastify.min.css'
+import { ToastContainer } from 'react-toastify'
 
-import SnackbarProvider from 'react-simple-snackbar'
+import '../common/styles/main.css'
 
 import BaseLayout from '../common/layouts/BaseLayout/BaseLayout'
 
 function MyApp({ Component, pageProps }) {
   return (
-    <SnackbarProvider>
+    <>
       <BaseLayout>
         <Component {...pageProps} />
       </BaseLayout>
-    </SnackbarProvider>
+      <ToastContainer
+        position="top-left"
+        autoClose={2000}
+        hideProgressBar={false}
+        closeOnClick
+        rtl={false}
+        draggable
+        pauseOnHover
+        theme="light"
+      />
+    </>
   )
 }
 

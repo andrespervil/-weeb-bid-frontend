@@ -7,6 +7,9 @@ import FullPageLoader from '../../common/components/FullPageLoader/FullPageLoade
 import ConnectionStatus from '../../common/components/ConnectionStatus/ConnectionStatus'
 import ProductImage from './components/ProductImage/ProductImage'
 
+// Utils
+import { getConnectionStatus } from '../../common/utils/connectionStatus'
+
 import styles from './Home.module.css'
 
 export default function HomeSection({}) {
@@ -14,13 +17,15 @@ export default function HomeSection({}) {
   const { sendJsonMessage, lastMessage, readyState } = useWebSocket(
     process.env.NEXT_PUBLIC_SOCKET_URL,
     {
-      shouldReconnect: (closeEvent) => true, // Attempt to reconnect
+      shouldReconnect: () => true, // Attempt to reconnect
       reconnectInterval: 1000,
     }
   )
 
   const { product, lastBid } = useMemo(() => {
     if (lastMessage) {
+      console.log(`lastMessage (${typeof lastMessage}):`, lastMessage)
+
       const _product = JSON.parse(lastMessage.data)
 
       return {
@@ -35,7 +40,7 @@ export default function HomeSection({}) {
     }
   }, [lastMessage])
 
-  const [bid, setBid] = useState(null)
+  const [bid, setBid] = useState(undefined)
 
   const handleClickSendMessage = () => {
     sendJsonMessage({
@@ -46,24 +51,16 @@ export default function HomeSection({}) {
     setBid(null)
   }
 
-  const connectionStatus = {
-    [ReadyState.CONNECTING]: 'Connecting',
-    [ReadyState.OPEN]: 'Open',
-    [ReadyState.CLOSING]: 'Closing',
-    [ReadyState.CLOSED]: 'Closed',
-    [ReadyState.UNINSTANTIATED]: 'Uninstantiated',
-  }[readyState]
+  const connectionStatus = getConnectionStatus(readyState)
 
-  if (!product && readyState === ReadyState.CONNECTING) return <FullPageLoader />
-
-  if (!product) return 'No hay productos disponibles'
+  if (!product || readyState === ReadyState.CONNECTING) return <FullPageLoader />
 
   return (
     <>
       <div className={styles.content}>
         <h2>{product.name}</h2>
 
-        <ProductImage src={product.photo} />
+        <ProductImage src={product.photo} alt={product.name} />
 
         <p>{product.description}</p>
 
