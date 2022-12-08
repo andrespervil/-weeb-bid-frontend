@@ -1,0 +1,27 @@
+.container {
+  padding: 16px;
+  position: relative;
+}
+
+@media (min-width: 768px) {
+  .container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .container > div {
+    background-color: #fff;
+    border-radius: 20px;
+    width: 80%;
+    max-width: 750px;
+    padding: 24px;
+    margin: 60px;
+
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+
+    box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
+  }
+}
