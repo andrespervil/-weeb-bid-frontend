@@ -15,3 +15,9 @@
   background-color: #fff;
   color: #000;
 }
+
+.button:disabled {
+  background-color: #ccc;
+  color: #fff;
+  cursor: not-allowed;
+}
