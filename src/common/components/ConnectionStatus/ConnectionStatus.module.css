@@ -1,0 +1,24 @@
+.connectionStatus {
+  position: fixed;
+  bottom: 10px;
+  left: 15px;
+  width: 10px;
+  height: 10px;
+  border-radius: 15px;
+}
+
+.connectionStatus[data-status='Open'] {
+  background-color: green;
+}
+
+.connectionStatus[data-status='Closing'] {
+  background-color: orange;
+}
+
+.connectionStatus[data-status='Closed'] {
+  background-color: red;
+}
+
+.connectionStatus[data-status='Uninstantiated'] {
+  background-color: gray;
+}
