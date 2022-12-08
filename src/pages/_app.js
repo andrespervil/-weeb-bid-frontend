@@ -1,12 +1,16 @@
 import '../common/styles/main.css'
 
+import SnackbarProvider from 'react-simple-snackbar'
+
 import BaseLayout from '../common/layouts/BaseLayout/BaseLayout'
 
 function MyApp({ Component, pageProps }) {
   return (
-    <BaseLayout>
-      <Component {...pageProps} />
-    </BaseLayout>
+    <SnackbarProvider>
+      <BaseLayout>
+        <Component {...pageProps} />
+      </BaseLayout>
+    </SnackbarProvider>
   )
 }
 
