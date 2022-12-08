@@ -85,7 +85,7 @@ export default function HomeSection({}) {
         <p>{product.description}</p>
 
         <div className={styles.bid}>
-          <h2>{currentBid}€</h2>
+          <h2>{Math.round((currentBid + Number.EPSILON) * 100) / 100}€</h2>
           <div>
             <div className={styles.bidInput}>
               <TextField onChange={handleSetBid} type="number" value={bid} />
