@@ -1,11 +1,11 @@
-import React, { useState, useCallback, useEffect, useMemo } from 'react'
+import React, { useState, useMemo } from 'react'
 import useWebSocket, { ReadyState } from 'react-use-websocket'
-
-import Image from 'next/image'
 
 import Button from '../../common/components/Button/Button'
 import TextField from '../../common/components/TextField/TextField'
 import FullPageLoader from '../../common/components/FullPageLoader/FullPageLoader'
+import ConnectionStatus from '../../common/components/ConnectionStatus/ConnectionStatus'
+import ProductImage from './components/ProductImage/ProductImage'
 
 import styles from './Home.module.css'
 
@@ -60,28 +60,22 @@ export default function HomeSection({}) {
 
   return (
     <>
-      <div className={styles.container}>
-        <div className={styles.content}>
-          <h2>{product.name}</h2>
+      <div className={styles.content}>
+        <h2>{product.name}</h2>
 
-          <div className={styles.imageWrapper}>
-            <div className={styles.image}>
-              <Image src={product.photo} layout="fill" objectFit="contain" />
-            </div>
-          </div>
+        <ProductImage src={product.photo} />
 
-          <p>{product.description}</p>
+        <p>{product.description}</p>
 
-          <div className={styles.bid}>
-            <h2>{lastBid?.value || product.initialPrice}€</h2>
-            <div>
-              <TextField onChange={(evt) => setBid(+evt.target.value)} value={bid} />
-              <Button onClick={handleClickSendMessage}>Bid</Button>
-            </div>
+        <div className={styles.bid}>
+          <h2>{lastBid?.value || product.initialPrice}€</h2>
+          <div>
+            <TextField onChange={(evt) => setBid(+evt.target.value)} value={bid} />
+            <Button onClick={handleClickSendMessage}>Bid</Button>
           </div>
         </div>
       </div>
-      <div className={styles.connectionStatus} data-status={connectionStatus} />
+      <ConnectionStatus connectionStatus={connectionStatus} />
     </>
   )
 }

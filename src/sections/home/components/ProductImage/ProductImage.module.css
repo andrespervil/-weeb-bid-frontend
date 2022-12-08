@@ -1,0 +1,16 @@
+.imageWrapper {
+  width: 90%;
+  margin: 0 auto;
+}
+
+.imageWrapper > div {
+  position: unset !important;
+}
+
+.imageWrapper > .image {
+  object-fit: contain;
+  width: 100% !important;
+  position: relative !important;
+  height: unset !important;
+  border-radius: 15px;
+}
