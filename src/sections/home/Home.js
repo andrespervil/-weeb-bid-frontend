@@ -22,7 +22,7 @@ export default function HomeSection({}) {
     }
   )
 
-  const { product, lastBid } = useMemo(() => {
+  const { product, currentBid } = useMemo(() => {
     if (lastMessage) {
       console.log(`lastMessage (${typeof lastMessage}):`, lastMessage)
 
@@ -30,17 +30,20 @@ export default function HomeSection({}) {
 
       return {
         product: _product,
-        lastBid: [...(_product.bids || [])].pop(),
+        currentBid: [...(_product.bids || [])].pop().value || _product.initialPrice,
       }
     }
 
     return {
       product: null,
-      lastBid: null,
+      currentBid: null,
     }
   }, [lastMessage])
 
   const [bid, setBid] = useState(undefined)
+
+  // TODO: Implement debounce
+  const handleSetBid = (evt) => setBid(evt.target.value)
 
   const handleClickSendMessage = () => {
     sendJsonMessage({
@@ -65,10 +68,19 @@ export default function HomeSection({}) {
         <p>{product.description}</p>
 
         <div className={styles.bid}>
-          <h2>{lastBid?.value || product.initialPrice}€</h2>
+          <h2>{currentBid}€</h2>
           <div>
-            <TextField onChange={(evt) => setBid(+evt.target.value)} value={bid} type="number" />
-            <Button onClick={handleClickSendMessage}>Bid</Button>
+            <div className={styles.bidInput}>
+              <TextField onChange={handleSetBid} type="number" value={bid} />
+              <Button onClick={handleClickSendMessage} disabled={!bid || bid <= currentBid}>
+                Bid
+              </Button>
+            </div>
+            {bid > 0 && bid <= currentBid && (
+              <div className={styles.helperText}>
+                <p>La puja debe ser mayor a la actual!</p>
+              </div>
+            )}
           </div>
         </div>
       </div>
