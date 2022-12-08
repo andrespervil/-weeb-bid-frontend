@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react'
+import React, { useState, useMemo, useEffect } from 'react'
 import useWebSocket, { ReadyState } from 'react-use-websocket'
 
 import Button from '../../common/components/Button/Button'
@@ -11,6 +11,7 @@ import ProductImage from './components/ProductImage/ProductImage'
 import { getConnectionStatus } from '../../common/utils/connectionStatus'
 
 import styles from './Home.module.css'
+import { notifyError, notifySuccess } from '../../common/utils/toastifyActions'
 
 export default function HomeSection({}) {
   //Public API that will echo messages sent to it back to the client
@@ -22,30 +23,46 @@ export default function HomeSection({}) {
     }
   )
 
-  const { product, currentBid } = useMemo(() => {
-    if (lastMessage) {
-      console.log(`lastMessage (${typeof lastMessage}):`, lastMessage)
-
-      const _product = JSON.parse(lastMessage.data)
-
-      return {
-        product: _product,
-        currentBid: [...(_product.bids || [])].pop().value || _product.initialPrice,
-      }
-    }
-
-    return {
-      product: null,
-      currentBid: null,
-    }
-  }, [lastMessage])
-
   const [bid, setBid] = useState(undefined)
+  const [product, setProduct] = useState()
+  const [currentBid, setCurrentBid] = useState()
+
+  useEffect(() => {
+    if (!lastMessage) return
+
+    const { product: _product, event } = JSON.parse(lastMessage.data)
+
+    if (JSON.stringify(_product) === JSON.stringify(product)) {
+      return
+    }
+
+    if (event === 'product-updated') {
+      notifySuccess('El producto ha sido actualizado')
+    }
+
+    if (event === 'error') {
+      notifyError('Ha ocurrido un error inesperado.')
+    }
+
+    if (event === 'test') {
+      notifySuccess('Conexión establecida.')
+    }
+
+    if (_product) {
+      setProduct(_product)
+      setCurrentBid([...(_product.bids || [])].pop().value || _product.initialPrice)
+    }
+  }, [lastMessage?.data])
 
   // TODO: Implement debounce
   const handleSetBid = (evt) => setBid(evt.target.value)
 
   const handleClickSendMessage = () => {
+    if (!bid || bid <= currentBid) {
+      notifyError('La puja debe ser mas alta.')
+      return
+    }
+
     sendJsonMessage({
       event: 'bid',
       bidValue: bid,
@@ -72,15 +89,8 @@ export default function HomeSection({}) {
           <div>
             <div className={styles.bidInput}>
               <TextField onChange={handleSetBid} type="number" value={bid} />
-              <Button onClick={handleClickSendMessage} disabled={!bid || bid <= currentBid}>
-                Bid
-              </Button>
+              <Button onClick={handleClickSendMessage}>Bid</Button>
             </div>
-            {bid > 0 && bid <= currentBid && (
-              <div className={styles.helperText}>
-                <p>La puja debe ser mayor a la actual!</p>
-              </div>
-            )}
           </div>
         </div>
       </div>
