@@ -57,15 +57,19 @@ export default function HomeSection({}) {
   // TODO: Implement debounce
   const handleSetBid = (evt) => setBid(evt.target.value)
 
+  const round = (value) => {
+    Math.round((value + Number.EPSILON) * 100) / 100
+  }
+
   const handleClickSendMessage = () => {
-    if (!bid || bid <= currentBid) {
+    if (!bid || round(bid) <= round(bid)) {
       notifyError('La puja debe ser mas alta.')
       return
     }
 
     sendJsonMessage({
       event: 'bid',
-      bidValue: bid,
+      bidValue: round(bid),
     })
 
     setBid(null)
@@ -85,7 +89,7 @@ export default function HomeSection({}) {
         <p>{product.description}</p>
 
         <div className={styles.bid}>
-          <h2>{Math.round((currentBid + Number.EPSILON) * 100) / 100}€</h2>
+          <h2>{round(currentBid)}€</h2>
           <div>
             <div className={styles.bidInput}>
               <TextField onChange={handleSetBid} type="number" value={bid} />
