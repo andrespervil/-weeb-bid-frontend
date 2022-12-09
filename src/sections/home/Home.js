@@ -58,11 +58,24 @@ export default function HomeSection({}) {
   const handleSetBid = (evt) => setBid(evt.target.value)
 
   const round = (value) => {
-    Math.round((value + Number.EPSILON) * 100) / 100
+    let parsedValue = value.replace(',', '.')
+
+    if (value.split('.')?.[1]?.length === 0) {
+      parsedValue = value.replace('.', '')
+    }
+
+    const res = Math.round((+parsedValue + Number.EPSILON) * 100) / 100
+
+    console.log(`parsedValue (${typeof parsedValue}):`, parsedValue)
+    console.log(`res (${typeof res}):`, res)
+
+    return res
   }
 
   const handleClickSendMessage = () => {
-    if (!bid || round(bid) <= round(bid)) {
+    console.log(`round(bid) (${typeof round(bid)}):`, round(bid))
+
+    if (!bid || round(bid) <= currentBid) {
       notifyError('La puja debe ser mas alta.')
       return
     }
@@ -89,10 +102,10 @@ export default function HomeSection({}) {
         <p>{product.description}</p>
 
         <div className={styles.bid}>
-          <h2>{round(currentBid)}€</h2>
+          <h2>{currentBid}€</h2>
           <div>
             <div className={styles.bidInput}>
-              <TextField onChange={handleSetBid} type="number" value={bid} />
+              <TextField onChange={handleSetBid} type="text" value={bid} />
               <Button onClick={handleClickSendMessage}>Bid</Button>
             </div>
           </div>
