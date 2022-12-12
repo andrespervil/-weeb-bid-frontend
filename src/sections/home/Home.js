@@ -50,12 +50,15 @@ export default function HomeSection({}) {
 
     if (_product) {
       setProduct(_product)
-      setCurrentBid([...(_product.bids || [])].pop().value || _product.initialPrice)
+      setCurrentBid([...(_product.bids || [])].pop()?.value || _product.initialPrice)
     }
   }, [lastMessage?.data])
 
   // TODO: Implement debounce
-  const handleSetBid = (evt) => setBid(evt.target.value)
+  const handleSetBid = (evt) => {
+    setBid(evt.target.value)
+    evt.preventDefault()
+  }
 
   const round = (value) => {
     let parsedValue = value.replace(',', '.')
@@ -64,12 +67,7 @@ export default function HomeSection({}) {
       parsedValue = value.replace('.', '')
     }
 
-    const res = Math.round((+parsedValue + Number.EPSILON) * 100) / 100
-
-    console.log(`parsedValue (${typeof parsedValue}):`, parsedValue)
-    console.log(`res (${typeof res}):`, res)
-
-    return res
+    return Math.round((+parsedValue + Number.EPSILON) * 100) / 100
   }
 
   const handleClickSendMessage = () => {
@@ -105,7 +103,7 @@ export default function HomeSection({}) {
           <h2>{currentBid}€</h2>
           <div>
             <div className={styles.bidInput}>
-              <TextField onChange={handleSetBid} type="text" value={bid} />
+              <TextField onChange={handleSetBid} type="number" value={bid} />
               <Button onClick={handleClickSendMessage}>Bid</Button>
             </div>
           </div>
