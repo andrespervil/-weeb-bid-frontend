@@ -6,12 +6,13 @@ import TextField from '../../common/components/TextField/TextField'
 import FullPageLoader from '../../common/components/FullPageLoader/FullPageLoader'
 import ConnectionStatus from '../../common/components/ConnectionStatus/ConnectionStatus'
 import ProductImage from './components/ProductImage/ProductImage'
+import CountDownTimer from '../../common/components/CountDownTimer/CountDownTimer'
 
 // Utils
 import { getConnectionStatus } from '../../common/utils/connectionStatus'
+import { notifyError, notifySuccess } from '../../common/utils/toastifyActions'
 
 import styles from './Home.module.css'
-import { notifyError, notifySuccess } from '../../common/utils/toastifyActions'
 
 export default function HomeSection({}) {
   //Public API that will echo messages sent to it back to the client
@@ -98,6 +99,8 @@ export default function HomeSection({}) {
         <ProductImage src={product.photo} alt={product.name} />
 
         <p>{product.description}</p>
+
+        <CountDownTimer productWeek={product.week} />
 
         <div className={styles.bid}>
           <h2>{currentBid}€</h2>
