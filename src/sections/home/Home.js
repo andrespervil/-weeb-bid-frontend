@@ -13,6 +13,7 @@ import { getConnectionStatus } from '../../common/utils/connectionStatus'
 import { notifyError, notifySuccess } from '../../common/utils/toastifyActions'
 
 import styles from './Home.module.css'
+import Card from '../../common/components/Card/Card'
 
 export default function HomeSection({}) {
   //Public API that will echo messages sent to it back to the client
@@ -94,15 +95,15 @@ export default function HomeSection({}) {
   return (
     <>
       <div className={styles.content}>
-        <h2>{product.name}</h2>
-
         <ProductImage src={product.photo} alt={product.name} />
+
+        <h2>{product.name}</h2>
 
         <p>{product.description}</p>
 
         <CountDownTimer productWeek={product.week} />
 
-        <div className={styles.bid}>
+        <Card className={styles.bid}>
           <h2>{currentBid}€</h2>
           <div>
             <div className={styles.bidInput}>
@@ -110,7 +111,7 @@ export default function HomeSection({}) {
               <Button onClick={handleClickSendMessage}>Bid</Button>
             </div>
           </div>
-        </div>
+        </Card>
       </div>
       <ConnectionStatus connectionStatus={connectionStatus} />
     </>
