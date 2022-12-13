@@ -73,10 +73,13 @@ export default function HomeSection({}) {
   }
 
   const handleClickSendMessage = () => {
-    console.log(`round(bid) (${typeof round(bid)}):`, round(bid))
-
     if (!bid || round(bid) <= currentBid) {
       notifyError('La puja debe ser mas alta.')
+      return
+    }
+
+    if (bid > 100000) {
+      notifyError('No te pases chic@')
       return
     }
 
