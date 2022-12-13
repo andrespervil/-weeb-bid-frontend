@@ -29,12 +29,12 @@ export default function CountDownTimer({ productWeek }) {
           <p>:</p>
           <div>
             {minutes}
-            <p>MINUTOS</p>
+            <p>MINS</p>
           </div>
           <p>:</p>
           <div>
             {seconds}
-            <p>SEGUNDOS</p>
+            <p>SEGS</p>
           </div>
         </div>
       </div>
